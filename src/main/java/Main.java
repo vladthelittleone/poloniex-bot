@@ -1,7 +1,11 @@
-import java.util.List;
+import java.io.IOException;
 
-import com.cf.client.poloniex.PoloniexExchangeService;
-import com.cf.data.model.poloniex.PoloniexTradeHistory;
+import org.knowm.xchange.Exchange;
+import org.knowm.xchange.ExchangeFactory;
+import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.dto.marketdata.OrderBook;
+import org.knowm.xchange.poloniex.PoloniexExchange;
+import org.knowm.xchange.service.marketdata.MarketDataService;
 
 /**
  * @author Skurishin Vladislav
@@ -9,12 +13,14 @@ import com.cf.data.model.poloniex.PoloniexTradeHistory;
  */
 public class Main
 {
-    public static void main(String[] args)
+    public static void main(String[] args) throws IOException
     {
-        String apiKey = "foo";
-        String apiSecret = "bar";
-        PoloniexExchangeService service = new PoloniexExchangeService(apiKey, apiSecret);
-        List<PoloniexTradeHistory> usdtBtcTradeHistory = service.returnTradeHistory("USDT_BTC");
-        System.out.println(usdtBtcTradeHistory.size());
+        Exchange bitstamp = ExchangeFactory.INSTANCE.createExchange(PoloniexExchange.class.getName());
+
+        MarketDataService marketDataService = bitstamp.getMarketDataService();
+
+        OrderBook orderBook = marketDataService.getOrderBook(CurrencyPair.BTC_USD);
+
+        System.out.println(orderBook.toString());
     }
 }
