@@ -2,6 +2,7 @@ import java.io.IOException;
 
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.ExchangeFactory;
+import org.knowm.xchange.ExchangeSpecification;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.marketdata.OrderBook;
 import org.knowm.xchange.poloniex.PoloniexExchange;
@@ -15,9 +16,13 @@ public class Main
 {
     public static void main(String[] args) throws IOException
     {
-        Exchange bitstamp = ExchangeFactory.INSTANCE.createExchange(PoloniexExchange.class.getName());
+        ExchangeSpecification exSpec = new PoloniexExchange().getDefaultExchangeSpecification();
+        exSpec.setUserName("34387");
+        exSpec.setApiKey("a4SDmpl9s6xWJS5fkKRT6yn41vXuY0AM");
+        exSpec.setSecretKey("sisJixU6Xd0d1yr6w02EHCb9UwYzTNuj");
+        Exchange poloniex = ExchangeFactory.INSTANCE.createExchange(exSpec);
 
-        MarketDataService marketDataService = bitstamp.getMarketDataService();
+        MarketDataService marketDataService = poloniex.getMarketDataService();
 
         OrderBook orderBook = marketDataService.getOrderBook(CurrencyPair.BTC_USD);
 
